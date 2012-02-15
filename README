@@ -1,0 +1,171 @@
+package 
+{
+
+  //import undo.com.alinakipoglu;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.ColorTransform;
+	import flash.events.Event;
+	import flash.filters.GlowFilter;
+	
+
+	public class DrawingProgram extends Sprite
+	{
+		
+
+		//We need 3 things: a random color,
+		//a random line thickness,
+		//and a random opacity
+		//private var historyManager:HistoryManager;
+		public var lineThickness:int;
+		public var prettyColor:uint;
+		public var lineAlpha:Number;
+		//var newStar = new star();
+		//var newStar2 = new starV();
+
+		
+		
+		public function DrawingProgram()
+		{
+			// Listen for the mouse down event
+			//to actually start drawing
+			//historyManager= new HistoryManager();
+			addStars();
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, beginDrawing );
+			stage.addEventListener(MouseEvent.MOUSE_UP, stopDrawing);
+			Star.addEventListener(MouseEvent.MOUSE_DOWN, moreStar);
+			
+			//undoButton.addEventListener(MouseEvent.CLICK, handleUndo);
+			//redoButton.addEventListener(MouseEvent.CLICK, handleRedo);
+			
+			
+
+		}
+		public function moreStar(e:MouseEvent)
+		{
+			addStars();
+		}
+
+		public function beginDrawing(e:MouseEvent)
+		{
+			
+			//Generate the color, line thickness, and alpha
+			//Math.random returns a number between 0 and 1
+			//Multiply by 15 to get a number between 0 and 15
+			//Round to get a whole number
+			this.lineThickness = 2;
+			//this.graphics.lineStyle(2, 000000);
+			//0xffffff is the hex value for the color white,;
+			//which numerically, its the largest color value
+			this.prettyColor = 0xffffff;
+			this.lineAlpha = .5;//alpha is between 0 and 1
+			//We are going to set our graphics class to use these line styles:
+			graphics.lineStyle(this.lineThickness, this.prettyColor, this.lineAlpha);
+			//Move our graphics "brush" to the current mouse location;
+			graphics.moveTo(mouseX, mouseY);
+			//Add listener for mouse movement to continue drawing;
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, drawing);
+		}
+		//Function to continue drawing the line after we have mouse down and want to paint
+		public function drawing(e:MouseEvent)
+		{
+			//This mouse move event will be continually fired off many times a second
+			//as long as the mouse is moving.
+			//The graphics class will keep drawing a line from the last place it was at
+			//to the current point.
+			graphics.lineTo(mouseX, mouseY);
+		}
+		public function stopDrawing(e:MouseEvent)
+		{
+			//To stop drawing on the mouse up, we have to remove the event listener
+			//for the the mouse move call. This stops the drawing event from getting called
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, drawing);
+		}
+		
+
+
+
+		
+		/*function moveCircles(e:Event)
+		{
+		//Every ball on the stage has an event listener
+		//for ENTER_FRAME, and calls this function
+		//Create a random Y amount to move the ball by
+		//Inbetween 2 and 7 pixels per frame
+		var randomY = Math.random()*5 ;
+		
+		if(e.target.y < stage.stageHeight - e.target.height)
+		{
+		e.target.y += randomY;
+		}
+		
+		}
+		*/
+		public function addStars()
+		{
+		
+			var myRandomNumber = Math.round(Math.random() * 300) + 200;
+		
+		
+			for (var i = 0; i < myRandomNumber; i++)
+			{
+		
+				var newStar = new star();
+				var newStar2 = new starV();
+				
+				addChild( newStar );
+				
+				addChild (newStar2);
+		
+				newStar2.x = randomX;
+				newStar2.y = randomY;
+				
+				var randomX = Math.random() * stage.stageWidth;
+				var randomY = Math.random() * stage.stageHeight;
+		
+				newStar.x = randomX;
+				newStar.y = randomY;
+				
+				newStar2.x = randomX;
+				newStar2.y = randomY;
+		
+		
+				var prettyColorStar = new ColorTransform();
+				var prettyColorStar2 = new ColorTransform();
+				prettyColorStar.color = Math.random() + 20 * 0xffffff;
+				prettyColorStar2.color = Math.random() + 10 * 0xffffff; 
+				
+				newStar.transform.colorTransform = prettyColorStar;
+				newStar2.transform.colorTransform = prettyColorStar2;
+		
+		
+				var randomOpacity = Math.random()/1.5;
+				newStar.alpha = randomOpacity;
+				newStar2.alpha = randomOpacity;
+		
+		
+				var randomScale = Math.random()/2;
+				newStar.scaleX = randomScale;
+				newStar.scaleY = randomScale;
+				
+				newStar2.scaleX = randomScale;
+				newStar2.scaleY = randomScale;
+		
+			}
+			
+		
+		}
+				/*private function handleUndo(e:MouseEvent):void
+				{
+					historyManager.undo();
+				}
+		
+				private function handleRedo(e:MouseEvent):void
+				{
+					historyManager.redo();
+				}*/
+
+	}
+
+}
